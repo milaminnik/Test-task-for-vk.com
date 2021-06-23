@@ -1,0 +1,60 @@
+# Импорт библиотек
+import concurrent.futures
+from collections import Counter
+import time
+
+
+class Counter:
+    """Подсчет окончательного результата. Инициализация со значением 0. Суммирует все поступающие значения"""
+    
+    def __init__(self):
+        self.value = 0
+        
+        
+    def update(self, new_value):
+        local = self.value
+        local += new_value
+        time.sleep(0.1)
+        self.value = local
+
+        
+class Task:
+    """Выполнение задачи. Инициализация со значением value=2. Рассчет нового значения value**2"""
+    
+    def __init__(self, value):
+        self.status = 'ready'
+        self.value = value
+    
+    
+    def execute(self):
+        new_value = self.value**2
+        self.value = new_value 
+        return self.value
+
+
+new_counter = Counter()
+values = [2]*10
+tasks = []
+
+
+# создание списка задач со значениями =values
+for value in values:
+    tasks.append(Task(value))
+    
+
+# создание исполнителя и определение количества потоков
+with ThreadPoolExecutor(max_workers=2) as executor:
+    # Список для готовых задач
+    future_list = []
+    
+    # Параллельное выполнение задач
+    for task in tasks:
+        task_done = executor.submit(task.execute)
+        future_list.append(task_done)
+    
+    # Ждет выполнения всех задач и обновляет объект класса Counter
+    for f in concurrent.futures.as_completed(future_list):
+        new_counter.update(f.result())
+        
+
+print(new_counter.value)
