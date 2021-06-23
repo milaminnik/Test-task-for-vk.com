@@ -1,0 +1,55 @@
+# Симуляция 20 поступления случайных значений [-5, 5]
+# Решение без использования сторонних библиотек, за исключением библиотеки для получения случайных значений
+
+import random
+
+
+class Stream:
+    def __init__(self, port, host):
+        self.port = port
+        self.host = host
+        
+        
+    def has_next(self):
+        '''Проверяет, есть ли следующее значение'''    
+        return len(values) <= 20
+    
+    
+    def next_value(self):
+        '''Считываниет новое измерение'''
+        return random.uniform(-5, 5)
+        
+
+# Список для хранения данных
+values = []
+
+# Условное обозначение порта и хоста
+port = 'my_port'
+host = 'my_host'
+
+# Объект класса
+stream = Stream(port=port, host=host)
+
+
+while  stream.has_next():
+    # Получение нового значения
+    value = stream.next_value()
+    
+    # Добавление нового значения в список
+    values.append(value)
+    
+    # Среднее
+    mean_value = sum(values) / len(values)
+    
+    # Счетчик для суммы квадратов разности
+    sum_squares = 0
+    
+    # Вычисление суммы квадратов разности значение минус среднее
+    for value in values:
+        a = (value - mean_value)**2
+        sum_squares += a
+        
+    # Рассчет стандартного отклонения
+    std_value = (sum_squares / len(values)) ** 0.5
+
+    print(std_value)
