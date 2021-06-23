@@ -1,0 +1,3 @@
+# Для N = 100
+
+SELECT task_id % 100 FROM table WHERE task_id >= 100
